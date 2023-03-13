@@ -112,8 +112,9 @@ error_reporting(0);
     <p style="display: block;">Login process looks Good</p>
     <div class="sa-button-container">
         <div class="sa-confirm-button-container">
-            <form action="home.php"  method="post">  
+            <form action="index.php"  method="post">  
 	            <button class="confirm" tabindex="1" style="display: inline-block; background-color: rgb(3, 38, 3); box-shadow: rgba(3, 38, 3, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px inset;">Greate</button>
+                <input type="text" name="please_login" value="please_login" style="display: none">
 	        </form>
         </div>
     </div>

@@ -29,36 +29,44 @@ $result=mysqli_query($connection,"SELECT * FROM `users` WHERE `username`='".$_PO
 
 $num=mysqli_fetch_array($result);
 
-if ($num>0) {
+if ($num>0){
 
-  $token =md5(getToken(50)).getToken(50);
-  
+  if ($_SESSION['token']===NULL) {
 
-  $_SESSION['username']=$_POST['username'];
-  $_SESSION['password']=$_POST['password'];
-  $_SESSION['token'] = $token;
+    $token =md5(getToken(50)).getToken(50);
+    $_SESSION['username']=$_POST['username'];
+    $_SESSION['password']=$_POST['password'];
+    $_SESSION['token'] = $token;
 
-  $reso=mysqli_query($connection,"SELECT * FROM `login-sessions` WHERE `username`='".$_POST['username']."' AND `loginOut` IS NULL");
-
-  $numo=mysqli_fetch_array($reso);
-
-  if ($numo>0) {
-  
-  $sql = "UPDATE `login-sessions` SET `loginOut` = NOW() WHERE `login-sessions`.`username`='".$_SESSION['username']."';";
-  $sql.="INSERT INTO `login-sessions` ( `username`, `token`, `loginTme`) VALUES ('".$_SESSION['username']."', '$token', NOW())";
-
-  $res=mysqli_multi_query($connection,$sql);
+    $reso=mysqli_query($connection,"SELECT * FROM `login-sessions` WHERE `username`='".$_POST['username']."' AND `loginOut` IS NULL");
+    $numo=mysqli_fetch_array($reso);
+    if ($numo>0){
+      header("location:process.php");
+    } else {
+      $sql="INSERT INTO `login-sessions` ( `username`, `token`, `loginTme`) VALUES ('".$_SESSION['username']."', '$token', NOW())";
+      $res=mysqli_query($connection,$sql);
+      header("location:index.php");
+      
+    }
     
-  } else {
-
-  $sql="INSERT INTO `login-sessions` ( `username`, `token`, `loginTme`) VALUES ('".$_SESSION['username']."', '$token', NOW())";
-
-  $res=mysqli_query($connection,$sql);
+  } else if($_SESSION['token']!==NULL) {
+      $reso=mysqli_query($connection,"SELECT * FROM `login-sessions` WHERE `username`='".$_POST['username']."' AND `token`='".$_SESSION['token']."' AND `loginOut` IS NULL");
+      $numo=mysqli_fetch_array($reso);
+      if ($numo>0) {
+        header("location:index.php");
+      } else {
+        header("location:process.php");
+      }
     
   }
 
 
-header("location:index.php");
+
+
+  
+  // $sql = "UPDATE `login-sessions` SET `loginOut` = NOW() WHERE `login-sessions`.`username`='".$_SESSION['username']."';";
+  // $sql.="INSERT INTO `login-sessions` ( `username`, `token`, `loginTme`) VALUES ('".$_SESSION['username']."', '$token', NOW())";
+
 
 } else {
 $errormsg="Invalid username or password";
