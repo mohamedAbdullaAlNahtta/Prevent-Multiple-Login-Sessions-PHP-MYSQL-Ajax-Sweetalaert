@@ -11,9 +11,6 @@ $username = $_SESSION['username'];
 $password = $_SESSION['password'];
 $token = $_SESSION['token'];
 
-
-var_dump($errormsg);
-echo '<br>';
 var_dump($username);
 echo '<br>';
 var_dump($password);

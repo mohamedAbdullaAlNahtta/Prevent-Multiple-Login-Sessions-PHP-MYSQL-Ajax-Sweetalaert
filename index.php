@@ -62,6 +62,8 @@ header("location:token.logout.process.php");
 <a href="pagetwo.php">page two</a>
 <br>
 <a href="pagethree.php">page three</a>
+<br>
+<a href="logout.php">logout</a>
 
 <script type="text/javascript">
     if (window.history.replaceState) {
