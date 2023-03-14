@@ -23,50 +23,23 @@ echo '<br>';
 // end this part for error check 
 
 if (isset($_POST['submit'])) {
-
+    $_SESSION['username']=$_POST['username'];
+    $_SESSION['password']=$_POST['password'];
 
 $result=mysqli_query($connection,"SELECT * FROM `users` WHERE `username`='".$_POST['username']."' AND `password`='".$_POST['password']."'");
 
 $num=mysqli_fetch_array($result);
 
 if ($num>0){
-
-  if ($_SESSION['token']===NULL) {
-
-    $token =md5(getToken(50)).getToken(50);
-    $_SESSION['username']=$_POST['username'];
-    $_SESSION['password']=$_POST['password'];
+  $token =md5(getToken(50)).getToken(50);
     $_SESSION['token'] = $token;
 
-    $reso=mysqli_query($connection,"SELECT * FROM `login-sessions` WHERE `username`='".$_POST['username']."' AND `loginOut` IS NULL");
-    $numo=mysqli_fetch_array($reso);
-    if ($numo>0){
-      header("location:process.php");
-    } else {
-      $sql="INSERT INTO `login-sessions` ( `username`, `token`, `loginTme`) VALUES ('".$_SESSION['username']."', '$token', NOW())";
-      $res=mysqli_query($connection,$sql);
-      header("location:index.php");
-      
-    }
-    
-  } else if($_SESSION['token']!==NULL) {
-      $reso=mysqli_query($connection,"SELECT * FROM `login-sessions` WHERE `username`='".$_POST['username']."' AND `token`='".$_SESSION['token']."' AND `loginOut` IS NULL");
-      $numo=mysqli_fetch_array($reso);
-      if ($numo>0) {
-        header("location:index.php");
-      } else {
-        header("location:process.php");
-      }
+
+  $result00=mysqli_query($connection,"INSERT INTO `login-sessions` ( `username`, `token`, `loginTme`) VALUES ('".$_SESSION['username']."', '$token', NOW())");
+  if ($result00===true) {
+    header("location:index.php");
     
   }
-
-
-
-
-  
-  // $sql = "UPDATE `login-sessions` SET `loginOut` = NOW() WHERE `login-sessions`.`username`='".$_SESSION['username']."';";
-  // $sql.="INSERT INTO `login-sessions` ( `username`, `token`, `loginTme`) VALUES ('".$_SESSION['username']."', '$token', NOW())";
-
 
 } else {
 $errormsg="Invalid username or password";
