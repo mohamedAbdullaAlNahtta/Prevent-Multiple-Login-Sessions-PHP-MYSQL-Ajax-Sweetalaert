@@ -13,7 +13,6 @@ $res=mysqli_multi_query($connection,$sql);
 $_SESSION['username']=="";
 $_SESSION['password']=="";
 $_SESSION['token']=="";
-$_SESSION['errormsg']="";
 
 $errormsg=$_SESSION['errormsg'];
 session_destroy();
